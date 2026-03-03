@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maintenance programmée</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 100px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #2d3748;
+        }
+
+        .date-badge {
+            background: #e2e8f0;
+            color: #4a5568;
+            padding: 8px 20px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-bottom: 25px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .message {
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .features {
+            display: flex;
+            justify-content: space-around;
+            margin: 40px 0;
+            padding: 20px 0;
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .feature {
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+
+        .feature-text {
+            font-size: 14px;
+            color: #718096;
+        }
+
+        .contact-info {
+            background: #fafafa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .contact-info p {
+            margin-bottom: 15px;
+            color: #4a5568;
+        }
+
+        .social-icons {
+            margin-top: 15px;
+        }
+
+        .social-icon {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            background: #e2e8f0;
+            color: #4a5568;
+            border-radius: 50%;
+            margin: 0 5px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-icon:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #a0aec0;
+        }
+
+        .refresh-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #48bb78;
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <span>⚙️</span>
+        </div>
+        
+        <h1>Maintenance en cours</h1>
+        
+        <div class="date-badge">
+            <span>📅 </span>
+            <span id="current-date"></span>
+        </div>
+
+        <div class="message">
+            <p>Nous effectuons actuellement des améliorations sur notre site.</p>
+            <p style="margin-top: 10px;">Notre équipe travaille pour vous offrir une expérience encore meilleure.</p>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🚀</div>
+                <div class="feature-text">Plus rapide</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🔒</div>
+                <div class="feature-text">Plus sécurisé</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">✨</div>
+                <div class="feature-text">Nouvelles fonctionnalités</div>
+            </div>
+        </div>
+
+        <div style="margin: 30px 0;">
+            <p>
+                <span class="refresh-indicator"></span>
+                <span id="status-text">Mise à jour en cours...</span>
+            </p>
+        </div>
+
+        <div class="contact-info">
+            <p><strong>Veuillez ressayer plutard !</strong></p>
+                       
+        </div>
+
+        <div class="footer">
+            <p>© 2026 PawCrypt - infotel. Tous droits réservés.</p>
+            <p style="margin-top: 5px;">Page de maintenance - Dernière mise à jour : <span id="update-time"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // Afficher la date actuelle
+        const date = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').textContent = date.toLocaleDateString('fr-FR', options);
+
+        // Afficher l'heure de dernière mise à jour
+        document.getElementById('update-time').textContent = date.toLocaleTimeString('fr-FR');
+
+        // Alterner les statuts
+        const statusText = document.getElementById('status-text');
+        const statuses = [
+            "Mise à jour en cours...",
+            "Installation des nouveaux modules...",
+            "Optimisation des bases de données...",
+            "Configuration des serveurs...",
+            "Tests de performance..."
+        ];
+        let index = 0;
+
+        setInterval(() => {
+            index = (index + 1) % statuses.length;
+            statusText.textContent = statuses[index];
+        }, 4000);
+
+        // Vérifier si la maintenance est terminée (simulé)
+        setTimeout(() => {
+            if (confirm("La maintenance est terminée ! Voulez-vous rafraîchir la page ?")) {
+                location.reload();
+            }
+        }, 7200000); // Suggérer un rafraîchissement après 30 secondes
+    </script>
+</body>
+</html>

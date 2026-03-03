@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Perdu ?</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Comic Neue', cursive;
+            margin: 0;
+            padding: 0;
+            background: #FFEAA7;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .emoji {
+            font-size: 120px;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        h1 {
+            font-size: 48px;
+            color: #FF6B6B;
+            margin: 0;
+            text-shadow: 3px 3px 0 #4ECDC4;
+        }
+
+        .message {
+            font-size: 24px;
+            color: #1A535C;
+            margin: 20px 0;
+        }
+
+        .search-box {
+            margin: 30px 0;
+        }
+
+        .search-box input {
+            padding: 15px 20px;
+            width: 300px;
+            border: none;
+            border-radius: 50px 0 0 50px;
+            font-size: 16px;
+            outline: none;
+            background: white;
+        }
+
+        .search-box button {
+            padding: 15px 30px;
+            border: none;
+            background: #FF6B6B;
+            color: white;
+            font-size: 16px;
+            border-radius: 0 50px 50px 0;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .search-box button:hover {
+            background: #ff5252;
+        }
+
+        .links {
+            margin-top: 30px;
+        }
+
+        .links a {
+            color: #1A535C;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: rgba(255, 107, 107, 0.2);
+            transition: all 0.3s;
+        }
+
+        .links a:hover {
+            background: #FF6B6B;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="emoji">🔍</div>
+        <h1>404</h1>
+        <div class="message">Oups ! On dirait que vous êtes perdu...</div>
+        <p>La page que vous cherchez a pris la poudre d'escampette !</p>
+
+        
+                
+    </div>
+</body>
+</html>
