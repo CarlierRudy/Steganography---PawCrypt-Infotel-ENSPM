@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PawCrypt — Stéganographie Chiffrée</title>
+  <style>
+    /* ── RESET & VARIABLES ── */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      /* Theme 1 - Default (Darkest) */
+      --bg: #0d0f14;
+      --surface: #151820;
+      --card: #1c2030;
+      --border: #2a2f45;
+      --accent: #6c63ff;
+      --accent2: #a78bfa;
+      --green: #34d399;
+      --red: #f87171;
+      --yellow: #fbbf24;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --header-bg: linear-gradient(135deg, #1a1040 0%, #0d1830 100%);
+      --btn-bg: linear-gradient(135deg, var(--accent), #8b7cf8);
+      --btn-shadow: 0 4px 16px rgba(108, 99, 255, .35);
+      --btn-shadow-hover: 0 6px 20px rgba(108, 99, 255, .5);
+      --badge-bg: rgba(108, 99, 255, .15);
+      --badge-border: rgba(108, 99, 255, .35);
+      --tab-shadow: 0 4px 12px rgba(108, 99, 255, .4);
+      --input-focus: rgba(108, 99, 255, .15);
+      --radius: 14px;
+      --shadow: 0 8px 32px rgba(0, 0, 0, .45);
+    }
+
+    [data-theme="2"] {
+      --bg: #1e293b;
+      --surface: #334155;
+      --card: #475569;
+      --border: #64748b;
+      --accent: #3b82f6;
+      --accent2: #60a5fa;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --header-bg: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      --btn-bg: linear-gradient(135deg, var(--accent), #60a5fa);
+      --btn-shadow: 0 4px 16px rgba(59, 130, 246, .35);
+      --btn-shadow-hover: 0 6px 20px rgba(59, 130, 246, .5);
+      --badge-bg: rgba(59, 130, 246, .15);
+      --badge-border: rgba(59, 130, 246, .35);
+      --tab-shadow: 0 4px 12px rgba(59, 130, 246, .4);
+      --input-focus: rgba(59, 130, 246, .15);
+      --shadow: 0 8px 32px rgba(0, 0, 0, .3);
+    }
+
+    [data-theme="3"] {
+      --bg: #374151;
+      --surface: #4b5563;
+      --card: #6b7280;
+      --border: #9ca3af;
+      --accent: #8b5cf6;
+      --accent2: #a78bfa;
+      --text: #f9fafb;
+      --muted: #d1d5db;
+      --header-bg: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+      --btn-bg: linear-gradient(135deg, var(--accent), #a78bfa);
+      --btn-shadow: 0 4px 16px rgba(139, 92, 246, .35);
+      --btn-shadow-hover: 0 6px 20px rgba(139, 92, 246, .5);
+      --badge-bg: rgba(139, 92, 246, .15);
+      --badge-border: rgba(139, 92, 246, .35);
+      --tab-shadow: 0 4px 12px rgba(139, 92, 246, .4);
+      --input-focus: rgba(139, 92, 246, .15);
+      --shadow: 0 8px 32px rgba(0, 0, 0, .2);
+    }
+
+    [data-theme="4"] {
+      --bg: #f3f4f6;
+      --surface: #e5e7eb;
+      --card: #ffffff;
+      --border: #d1d5db;
+      --accent: #4f46e5;
+      --accent2: #6366f1;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --header-bg: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+      --btn-bg: linear-gradient(135deg, var(--accent), #6366f1);
+      --btn-shadow: 0 4px 16px rgba(79, 70, 229, .35);
+      --btn-shadow-hover: 0 6px 20px rgba(79, 70, 229, .5);
+      --badge-bg: rgba(79, 70, 229, .15);
+      --badge-border: rgba(79, 70, 229, .35);
+      --tab-shadow: 0 4px 12px rgba(79, 70, 229, .4);
+      --input-focus: rgba(79, 70, 229, .15);
+      --shadow: 0 8px 32px rgba(0, 0, 0, .1);
+      --green: #10b981;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+    }
+
+    [data-theme="5"] {
+      --bg: #ffffff;
+      --surface: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --accent: #2563eb;
+      --accent2: #3b82f6;
+      --text: #0f172a;
+      --muted: #64748b;
+      --header-bg: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      --btn-bg: linear-gradient(135deg, var(--accent), #3b82f6);
+      --btn-shadow: 0 4px 16px rgba(37, 99, 235, .35);
+      --btn-shadow-hover: 0 6px 20px rgba(37, 99, 235, .5);
+      --badge-bg: rgba(37, 99, 235, .15);
+      --badge-border: rgba(37, 99, 235, .35);
+      --tab-shadow: 0 4px 12px rgba(37, 99, 235, .4);
+      --input-focus: rgba(37, 99, 235, .15);
+      --shadow: 0 8px 32px rgba(0, 0, 0, .05);
+      --green: #10b981;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--header-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 1.6rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      box-shadow: 0 4px 16px rgba(108, 99, 255, .4);
+      flex-shrink: 0;
+    }
+
+    .brand h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+    }
+
+    .brand p {
+      font-size: .78rem;
+      color: var(--muted);
+      margin-top: .15rem;
+    }
+
+    .theme-picker {
+      display: flex;
+      gap: 8px;
+      margin-left: auto;
+      background: var(--surface);
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .theme-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      cursor: pointer;
+      transition: all .2s;
+      outline: none;
+    }
+
+    .theme-dot:hover {
+      transform: scale(1.15);
+    }
+
+    .theme-dot.active {
+      border-color: var(--accent);
+      transform: scale(1.2);
+    }
+
+    .badge {
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-border);
+      color: var(--accent2);
+      padding: .35rem .85rem;
+      border-radius: 99px;
+      font-size: .75rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* ── TABS ── */
+    main {
+      flex: 1;
+      padding: 2rem clamp(1rem, 5vw, 4rem);
+      max-width: 900px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .tabs {
+      display: flex;
+      gap: .5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: .4rem;
+      margin-bottom: 2rem;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: .7rem 1rem;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      border-radius: 10px;
+      font-size: .9rem;
+      font-weight: 600;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .4rem;
+    }
+
+    .tab-btn:hover {
+      color: var(--text);
+      background: var(--border);
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: var(--tab-shadow);
+    }
+
+    /* ── CARDS ── */
+    .panel {
+      display: none;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent2);
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .card-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+      margin-left: .5rem;
+    }
+
+    /* ── FORM ELEMENTS ── */
+    label {
+      display: block;
+      font-size: .82rem;
+      color: var(--muted);
+      margin-bottom: .4rem;
+      font-weight: 500;
+    }
+
+    input[type=text],
+    input[type=password],
+    textarea,
+    input[type=file] {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      padding: .7rem 1rem;
+      font-size: .9rem;
+      transition: border .2s;
+      outline: none;
+    }
+
+    input[type=text]:focus,
+    input[type=password]:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--input-focus);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 110px;
+      line-height: 1.5;
+    }
+
+    .or-divider {
+      text-align: center;
+      color: var(--muted);
+      font-size: .8rem;
+      margin: 1rem 0;
+      position: relative;
+    }
+
+    .or-divider::before,
+    .or-divider::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 44%;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .or-divider::before {
+      left: 0;
+    }
+
+    .or-divider::after {
+      right: 0;
+    }
+
+    /* Custom file input */
+    .file-drop {
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all .2s;
+      position: relative;
+      background: var(--surface);
+    }
+
+    .file-drop:hover,
+    .file-drop.has-file {
+      border-color: var(--accent);
+      background: var(--badge-bg);
+    }
+
+    .file-drop input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .file-drop .icon {
+      font-size: 2rem;
+      margin-bottom: .4rem;
+    }
+
+    .file-drop .hint {
+      font-size: .82rem;
+      color: var(--muted);
+    }
+
+    .file-drop .fname {
+      font-size: .85rem;
+      color: var(--green);
+      margin-top: .4rem;
+      font-weight: 600;
+    }
+
+    /* Password field */
+    .pw-wrap {
+      position: relative;
+    }
+
+    .pw-wrap input {
+      padding-right: 3rem;
+    }
+
+    .pw-toggle {
+      position: absolute;
+      right: .8rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+
+    /* Row layout */
+    .row {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .row>* {
+      flex: 1;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      padding: .8rem 1.8rem;
+      border-radius: 10px;
+      font-size: .9rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all .2s;
+    }
+
+    .btn-primary {
+      background: var(--btn-bg);
+      color: #fff;
+      width: 100%;
+      margin-top: 1.2rem;
+      box-shadow: var(--btn-shadow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--btn-shadow-hover);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-primary:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ── RESULT BOX ── */
+    #encode-result,
+    #decode-result,
+    #analyze-result {
+      display: none;
+      margin-top: 1.5rem;
+    }
+
+    .result-card {
+      border-radius: var(--radius);
+      padding: 1.4rem 1.6rem;
+      border-left: 4px solid var(--green);
+      background: rgba(52, 211, 153, .06);
+      border: 1px solid rgba(52, 211, 153, .2);
+    }
+
+    .result-card.error {
+      border-left-color: var(--red);
+      background: rgba(248, 113, 113, .06);
+      border: 1px solid rgba(248, 113, 113, .2);
+    }
+
+    .result-title {
+      font-size: .85rem;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: .8rem;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+
+    .result-card.error .result-title {
+      color: var(--red);
+    }
+
+    .dl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: var(--green);
+      color: #0d0f14;
+      padding: .55rem 1.2rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: .85rem;
+      text-decoration: none;
+      transition: opacity .2s;
+    }
+
+    .dl-btn:hover {
+      opacity: .85;
+    }
+
+    .msg-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: monospace;
+      font-size: .88rem;
+      color: var(--text);
+      word-break: break-word;
+      margin-bottom: .8rem;
+      white-space: pre-wrap;
+      max-height: 240px;
+      overflow-y: auto;
+    }
+
+    /* Analyze table */
+    .analyze-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .85rem;
+    }
+
+    .analyze-table td {
+      padding: .55rem .8rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .analyze-table td:first-child {
+      color: var(--muted);
+      width: 45%;
+    }
+
+    .analyze-table td:last-child {
+      font-weight: 600;
+      font-family: monospace;
+    }
+
+    .tag-ok {
+      color: var(--green);
+    }
+
+    .tag-bad {
+      color: var(--red);
+    }
+
+    .tag-warn {
+      color: var(--yellow);
+    }
+
+    /* ── SPINNER ── */
+    .spinner {
+      display: none;
+    }
+
+    .loading .spinner {
+      display: inline-block;
+    }
+
+    .loading .btn-label {
+      display: none;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .spin-icon {
+      animation: spin .7s linear infinite;
+      display: inline-block;
+    }
+
+    /* ── INFO PANELS ── */
+    details {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-top: 1rem;
+    }
+
+    summary {
+      padding: .9rem 1.2rem;
+      cursor: pointer;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--muted);
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      user-select: none;
+    }
+
+    summary:hover {
+      color: var(--text);
+    }
+
+    .details-body {
+      padding: 0 1.2rem 1.2rem;
+      font-size: .83rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .details-body strong {
+      color: var(--text);
+    }
+
+    .details-body code {
+      background: var(--card);
+      padding: .1em .4em;
+      border-radius: 4px;
+      color: var(--accent2);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 1.2rem;
+      font-size: .75rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .row {
+        flex-direction: column;
+      }
+
+      .tabs {
+        flex-direction: column;
+      }
+
+      header {
+        flex-wrap: wrap;
+      }
+
+      .badge {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">🐾</div>
+    <div class="brand">
+      <h1>PawCrypt - infotel</h1>
+      <p>application web de stéganographie</p>
+    </div>
+    <div class="theme-picker">
+      <button class="theme-dot" data-t="1" style="background:#0d0f14" title="Très sombre"
+        onclick="setTheme(1)"></button>
+      <button class="theme-dot" data-t="2" style="background:#1e293b" title="Sombre" onclick="setTheme(2)"></button>
+      <button class="theme-dot" data-t="3" style="background:#374151" title="Moyen" onclick="setTheme(3)"></button>
+      <button class="theme-dot" data-t="4" style="background:#f3f4f6" title="Clair" onclick="setTheme(4)"></button>
+      <button class="theme-dot" data-t="5" style="background:#ffffff" title="Très clair" onclick="setTheme(5)"></button>
+    </div>
+    <span class="badge">🔒 stegano-crypt.infotel</span>
+  </header>
+
+  <main>
+
+    <!-- TABS -->
+    <div class="tabs" role="tablist">
+      <button class="tab-btn active" onclick="switchTab('encode')" id="tab-encode">🔐 Encoder</button>
+      <button class="tab-btn" onclick="switchTab('decode')" id="tab-decode">🔓 Décoder</button>
+      <button class="tab-btn" onclick="switchTab('analyze')" id="tab-analyze">🔬 Analyser</button>
+    </div>
+
+    <!-- ══════════════════════ ENCODE ══════════════════════ -->
+    <div class="panel active" id="panel-encode">
+      <div class="card">
+        <div class="card-title">✉️ Message ou Fichier à cacher</div>
+
+        <label>Message texte</label>
+        <textarea id="enc-msg" placeholder="Entrez votre message secret ici…"></textarea>
+
+        <div class="or-divider">ou un fichier</div>
+
+        <label>Fichier (image, audio, vidéo, document…)</label>
+        <div class="file-drop" id="enc-drop">
+          <input type="file" id="enc-file" onchange="updateDrop('enc-drop','enc-file')">
+          <div class="icon">📁</div>
+          <div class="hint">Cliquez ou glissez un fichier ici</div>
+          <div class="fname" id="enc-fname"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🔑 Sécurité</div>
+        <label>Mot de passe AES-256</label>
+        <div class="pw-wrap">
+          <input type="password" id="enc-pw" placeholder="Mot de passe fort recommandé…">
+          <button class="pw-toggle" onclick="togglePw('enc-pw', this)" title="Afficher/masquer">👁</button>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="doEncode()" id="btn-encode">
+        <span class="spinner"><span class="spin-icon">⟳</span></span>
+        <span class="btn-label">🐾 Encoder dans une image de chien</span>
+      </button>
+
+      <div id="encode-result">
+        <div class="result-card" id="encode-result-card">
+          <div class="result-title" id="encode-result-title"></div>
+          <div id="encode-result-body"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════ DECODE ══════════════════════ -->
+    <div class="panel" id="panel-decode">
+      <div class="card">
+        <div class="card-title">🖼️ Image encodée</div>
+        <label>Sélectionnez l'image PawCrypt (.png)</label>
+        <div class="file-drop" id="dec-drop">
+          <input type="file" id="dec-file" accept="image/*" onchange="updateDrop('dec-drop','dec-file')">
+          <div class="icon">🖼️</div>
+          <div class="hint">Cliquez ou glissez l'image ici</div>
+          <div class="fname" id="dec-fname"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🔑 Sécurité</div>
+        <label>Mot de passe AES-256</label>
+        <div class="pw-wrap">
+          <input type="password" id="dec-pw" placeholder="Mot de passe utilisé à l'encodage…">
+          <button class="pw-toggle" onclick="togglePw('dec-pw', this)" title="Afficher/masquer">👁</button>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="doDecode()" id="btn-decode">
+        <span class="spinner"><span class="spin-icon">⟳</span></span>
+        <span class="btn-label">🔓 Extraire et déchiffrer</span>
+      </button>
+
+      <div id="decode-result">
+        <div class="result-card" id="decode-result-card">
+          <div class="result-title" id="decode-result-title"></div>
+          <div id="decode-result-body"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════ ANALYZE ══════════════════════ -->
+    <div class="panel" id="panel-analyze">
+      <div class="card">
+        <div class="card-title">🔍 Comparaison d'images</div>
+        <div class="row">
+          <div>
+            <label>Image originale</label>
+            <div class="file-drop" id="an-drop1">
+              <input type="file" id="an-orig" accept="image/*" onchange="updateDrop('an-drop1','an-orig')">
+              <div class="icon">📷</div>
+              <div class="hint">Image originale</div>
+              <div class="fname" id="an-orig-fname"></div>
+            </div>
+          </div>
+          <div>
+            <label>Image encodée</label>
+            <div class="file-drop" id="an-drop2">
+              <input type="file" id="an-enc" accept="image/*" onchange="updateDrop('an-drop2','an-enc')">
+              <div class="icon">🐾</div>
+              <div class="hint">Image PawCrypt</div>
+              <div class="fname" id="an-enc-fname"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="doAnalyze()" id="btn-analyze">
+        <span class="spinner"><span class="spin-icon">⟳</span></span>
+        <span class="btn-label">🔬 Analyser les différences</span>
+      </button>
+
+      <div id="analyze-result">
+        <div class="result-card" id="analyze-result-card">
+          <div class="result-title" id="analyze-result-title"></div>
+          <div id="analyze-result-body"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════ PÉDAGOGIE ══════════════════════ -->
+    <details>
+      <summary>📖 Comment fonctionne PawCrypt ?</summary>
+      <div class="details-body">
+        <p><strong>🔢 Stéganographie LSB (Least Significant Bit)</strong><br>
+          Chaque pixel d'une image RGB contient 3 composantes (Rouge, Vert, Bleu) codées sur 8 bits.
+          Le bit le moins significatif (LSB) de chaque composante est modifié pour y stocker 1 bit du message.
+          La variation de couleur est imperceptible à l'œil humain (±1 sur 255).
+          Capacité maximale : <code>largeur × hauteur × 3 / 8</code> octets.</p>
+
+        <p><strong>🔐 Chiffrement AES-256-CBC</strong><br>
+          Le message est d'abord chiffré avec AES-256 en mode CBC avant d'être caché.
+          La clé est dérivée du mot de passe avec <code>PBKDF2</code> (200 000 itérations, SHA-256, salt aléatoire 128
+          bits).
+          Un IV (vecteur d'initialisation) aléatoire de 128 bits est généré à chaque encodage.</p>
+
+        <p><strong>🏷️ En-tête de données</strong><br>
+          PawCrypt préfixe les données par le marqueur <code>PAWCRYPT</code> (8 octets) suivi de la longueur
+          du payload sur 4 octets, permettant une extraction précise et une détection d'authenticité.</p>
+
+        <p><strong>⚠️ Limites et failles</strong><br>
+          • L'analyse statistique des LSB peut révéler la présence de données cachées.<br>
+          • La compression JPEG détruit les données LSB (toujours utiliser du PNG).<br>
+          • Un attaquant connaissant le marqueur <code>PAWCRYPT</code> peut détecter les images encodées.<br>
+          • La sécurité repose sur la solidité du mot de passe AES : utilisez des mots de passe longs.</p>
+      </div>
+    </details>
+
+  </main>
+
+  <footer>PawCrypt - infotel v1.0 — Stéganographie | stegano-crypt.infotel
+    <br>
+    Make with love by <a href="https://github.com/infotel-pawcrypt" target="_blank">infotel-pawcrypt</a>
+    CopyRight © 2026 infotel-pawcrypt
+  </footer>
+
+  <script>
+    // ── THEME ──
+    function setTheme(t) {
+      document.documentElement.setAttribute('data-theme', t);
+      localStorage.setItem('pawcrypt-theme', t);
+      document.querySelectorAll('.theme-dot').forEach(d => {
+        d.classList.toggle('active', d.getAttribute('data-t') == t);
+      });
+    }
+    const savedTheme = localStorage.getItem('pawcrypt-theme') || '1';
+    setTheme(savedTheme);
+
+    // ── TAB SWITCHING ──
+    function switchTab(name) {
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('panel-' + name).classList.add('active');
+      document.getElementById('tab-' + name).classList.add('active');
+    }
+
+    // ── FILE DROP LABELS ──
+    function updateDrop(dropId, inputId) {
+      const input = document.getElementById(inputId);
+      const drop = document.getElementById(dropId);
+      const fname = drop.querySelector('.fname');
+      if (input.files && input.files[0]) {
+        fname.textContent = '✓ ' + input.files[0].name;
+        drop.classList.add('has-file');
+      }
+    }
+
+    // ── PASSWORD TOGGLE ──
+    function togglePw(inputId, btn) {
+      const inp = document.getElementById(inputId);
+      if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '🙈'; }
+      else { inp.type = 'password'; btn.textContent = '👁'; }
+    }
+
+    // ── LOADING STATE ──
+    function setLoading(btnId, on) {
+      const btn = document.getElementById(btnId);
+      btn.disabled = on;
+      btn.classList.toggle('loading', on);
+    }
+
+    // ── SHOW RESULT ──
+    function showResult(prefix, ok, title, bodyHTML) {
+      const wrap = document.getElementById(prefix + '-result');
+      const card = document.getElementById(prefix + '-result-card');
+      const ttl = document.getElementById(prefix + '-result-title');
+      const body = document.getElementById(prefix + '-result-body');
+      wrap.style.display = 'block';
+      card.className = 'result-card' + (ok ? '' : ' error');
+      ttl.innerHTML = (ok ? '✅ ' : '❌ ') + title;
+      body.innerHTML = bodyHTML;
+      wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // ── ENCODE ──
+    async function doEncode() {
+      const msg = document.getElementById('enc-msg').value.trim();
+      const file = document.getElementById('enc-file').files[0];
+      const pw = document.getElementById('enc-pw').value;
+
+      if (!pw) return showResult('encode', false, 'Mot de passe manquant', 'Veuillez entrer un mot de passe.');
+      if (!msg && !file) return showResult('encode', false, 'Données manquantes', 'Entrez un message ou sélectionnez un fichier.');
+
+      const fd = new FormData();
+      fd.append('password', pw);
+      if (file) fd.append('file', file);
+      else fd.append('message', msg);
+
+      setLoading('btn-encode', true);
+      try {
+        const r = await fetch('/encode', { method: 'POST', body: fd });
+        if (r.ok) {
+          const blob = await r.blob();
+          const url = URL.createObjectURL(blob);
+          showResult('encode', true, 'Image générée avec succès',
+            `<p style="margin-bottom:.8rem;font-size:.84rem;color:var(--muted)">
+          Données chiffrées (AES-256-CBC + PBKDF2) et cachées dans une image de chien via LSB.
+        </p>
+        <a class="dl-btn" href="${url}" download="pawcrypt_output.png">⬇️ Télécharger pawcrypt_output.png</a>`
+          );
+        } else {
+          const j = await r.json();
+          showResult('encode', false, 'Erreur', j.error || 'Erreur inconnue.');
+        }
+      } catch (e) {
+        showResult('encode', false, 'Erreur réseau', e.message);
+      }
+      setLoading('btn-encode', false);
+    }
+
+    // ── DECODE ──
+    async function doDecode() {
+      const file = document.getElementById('dec-file').files[0];
+      const pw = document.getElementById('dec-pw').value;
+
+      if (!file) return showResult('decode', false, 'Image manquante', 'Sélectionnez une image PawCrypt.');
+      if (!pw) return showResult('decode', false, 'Mot de passe manquant', 'Entrez le mot de passe.');
+
+      const fd = new FormData();
+      fd.append('image', file);
+      fd.append('password', pw);
+
+      setLoading('btn-decode', true);
+      try {
+        const r = await fetch('/decode', { method: 'POST', body: fd });
+        const j = await r.json();
+        if (r.ok) {
+          if (j.type === 'text') {
+            showResult('decode', true, 'Message déchiffré',
+              `<div class="msg-box">${escHtml(j.message)}</div>
+           <button class="btn btn-primary" style="width:auto;padding:.55rem 1.2rem"
+             onclick="copyText(this,'${btoa(unescape(encodeURIComponent(j.message)))}')">📋 Copier</button>`
+            );
+          } else {
+            const bytes = b64ToUint8(j.data);
+            const blob = new Blob([bytes]);
+            const url = URL.createObjectURL(blob);
+            showResult('decode', true, 'Fichier extrait',
+              `<p style="margin-bottom:.8rem;color:var(--muted);font-size:.84rem">Fichier récupéré : <strong>${escHtml(j.filename)}</strong></p>
+           <a class="dl-btn" href="${url}" download="${escHtml(j.filename)}">⬇️ Télécharger ${escHtml(j.filename)}</a>`
+            );
+          }
+        } else {
+          showResult('decode', false, 'Erreur', j.error || 'Erreur inconnue.');
+        }
+      } catch (e) {
+        showResult('decode', false, 'Erreur réseau', e.message);
+      }
+      setLoading('btn-decode', false);
+    }
+
+    // ── ANALYZE ──
+    async function doAnalyze() {
+      const orig = document.getElementById('an-orig').files[0];
+      const enc = document.getElementById('an-enc').files[0];
+      if (!orig || !enc) return showResult('analyze', false, 'Images manquantes', 'Sélectionnez les deux images.');
+
+      const fd = new FormData();
+      fd.append('original', orig);
+      fd.append('encoded', enc);
+
+      setLoading('btn-analyze', true);
+      try {
+        const r = await fetch('/analyze', { method: 'POST', body: fd });
+        const j = await r.json();
+        if (r.ok) {
+          const diffTag = j.hashes_match
+            ? `<span class="tag-ok">✓ Identiques</span>`
+            : `<span class="tag-bad">✗ Différents</span>`;
+          const sizeDiff = j.size_diff === 0
+            ? `<span class="tag-ok">0 octet</span>`
+            : `<span class="tag-warn">${j.size_diff > 0 ? '+' : ''}${j.size_diff} octets</span>`;
+          const pixTag = j.diff_pixels !== null
+            ? `<span class="${j.diff_pixels > 0 ? 'tag-warn' : 'tag-ok'}">${j.diff_pixels.toLocaleString()} px (${j.diff_percent}%)</span>`
+            : `<span class="tag-warn">Tailles différentes</span>`;
+
+          showResult('analyze', true, 'Analyse terminée',
+            `<table class="analyze-table">
+          <tr><td>Taille originale</td><td>${formatBytes(j.original_size)}</td></tr>
+          <tr><td>Taille encodée</td><td>${formatBytes(j.encoded_size)}</td></tr>
+          <tr><td>Différence de taille</td><td>${sizeDiff}</td></tr>
+          <tr><td>SHA-256 original</td><td style="word-break:break-all;font-size:.75rem">${j.hash_original}</td></tr>
+          <tr><td>SHA-256 encodé</td><td style="word-break:break-all;font-size:.75rem">${j.hash_encoded}</td></tr>
+          <tr><td>Hash identique ?</td><td>${diffTag}</td></tr>
+          <tr><td>Pixels modifiés</td><td>${pixTag}</td></tr>
+        </table>`
+          );
+        } else {
+          showResult('analyze', false, 'Erreur', j.error || 'Erreur inconnue.');
+        }
+      } catch (e) {
+        showResult('analyze', false, 'Erreur réseau', e.message);
+      }
+      setLoading('btn-analyze', false);
+    }
+
+    // ── UTILS ──
+    function escHtml(s) {
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    function b64ToUint8(b64) {
+      const bin = atob(b64);
+      const arr = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+      return arr;
+    }
+    function formatBytes(b) {
+      if (b < 1024) return b + ' octets';
+      if (b < 1048576) return (b / 1024).toFixed(1) + ' Ko';
+      return (b / 1048576).toFixed(2) + ' Mo';
+    }
+    function copyText(btn, b64) {
+      navigator.clipboard.writeText(decodeURIComponent(escape(atob(b64)))).then(() => {
+        btn.textContent = '✓ Copié !';
+        setTimeout(() => btn.textContent = '📋 Copier', 2000);
+      });
+    }
+  </script>
+</body>
+
+</html>
