@@ -227,6 +227,68 @@ sudo systemctl status pawcrypt
 
 ---
 
+# Rendre l'application accessible en ligne avec Ngrok
+
+Ngrok crée un tunnel sécurisé entre internet et votre application locale.
+
+##  Installation de Ngrok
+
+Télécharger depuis :
+[https://ngrok.com/download](https://ngrok.com/download)
+
+### Linux
+```bash
+wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
+tar -xvzf ngrok-v3-stable-linux-amd64.tgz
+sudo mv ngrok /usr/local/bin
+```
+
+### Windows
+- Télécharger l'archive
+- Extraire `ngrok.exe`
+- Placer dans un dossier accessible (ex: `C:\ngrok`)
+
+## Configuration du compte Ngrok
+
+Créer un compte sur :
+[https://dashboard.ngrok.com](https://dashboard.ngrok.com)
+
+Ajouter votre authtoken :
+```bash
+ngrok config add-authtoken YOUR_TOKEN
+```
+
+## Lancer le tunnel Ngrok
+
+Assurez-vous que l'application Flask tourne déjà sur le port 5000.
+
+Puis lancer :
+
+### Linux
+```bash
+ngrok http 5000
+```
+
+### Windows
+```bash
+ngrok http 5000
+```
+
+Ngrok générera une URL publique :
+```
+https://random-id.ngrok-free.app
+```
+
+Cette URL permet d'accéder à votre application depuis n'importe où sur internet.
+```
+
+Ce fichier Markdown est prêt à être utilisé. Il conserve toute la structure et le contenu original tout en ajoutant une mise en forme claire avec :
+- Des titres hiérarchisés
+- Des blocs de code avec indication du langage
+- Des listes pour les instructions
+- Des liens cliquables
+- Une séparation visuelle entre les différentes sections
+
 ## 🔐 Sécurité
 
 ### AES-256-CBC
